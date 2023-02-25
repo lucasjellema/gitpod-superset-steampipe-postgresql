@@ -3,7 +3,10 @@ Gitpod workspace for Apache Superset combined with Steampipe and PostgreSQL
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/lucasjellema/gitpod-superset-steampipe-postgresql)
 
-Once the workspace is up and running, the following components will have been installed:
+Once the workspace is up and running, 
+![](images/workspace-started.png)  
+
+the following components will have been installed:
 
 * Apache Superset (six Docker containers - coordinated by Docker Compose)
 ** PostgreSQL (metadata store for SuperSet)
@@ -21,6 +24,7 @@ Once the workspace has fully started and Steampipe is available, you can execute
 ```
 steampipe query "select title, link, description from rss_channel where feed_link = 'https://technology.amis.nl/feed/'"
 ```
+![](images/query-lnk-feed.png)  
 
 to query details about the RSS feed published for the AMIS Technology Blog. This next query will list title, publication timestamp and URL for the most recent articles on the AMIS blog (latest first):
 
@@ -38,7 +42,7 @@ order by
   published desc;
 "
 ```
-
+![](images/query-feed-items.png)  
 Other properties available in the RSS_ITEM "view" include author_name and email, image_title and image_url, categories, description and content. Let's see if we can inspect these properties in Superset.
 
 In order to look at data from Steampipe in Superset, we first need to add a database connection in Superset to Steampipe's PostgreSQL database.
