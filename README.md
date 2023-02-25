@@ -12,6 +12,7 @@ Once the workspace is up and running, the following components will have been in
 * PostgreSQL 
 
 This picture shows the contents of the workspace:
+![](images/gitpod-architecture.png)  
 
 # Steampipe
 
