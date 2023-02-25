@@ -1,0 +1,8 @@
+{
+    "workbench.editorAssociations": 
+        {
+            "README.md": "vscode.markdown.preview.editor",
+        },
+    "workbench.startupEditor": "none",
+ 
+}
