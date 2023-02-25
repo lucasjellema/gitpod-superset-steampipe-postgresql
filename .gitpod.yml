@@ -1,0 +1,23 @@
+tasks:
+  - name: Install Apache SuperSet
+    init: |
+      git clone https://github.com/apache/superset.git
+      cd superset
+      docker-compose -f docker-compose-non-dev.yml pull
+      docker-compose -f docker-compose-non-dev.yml up      
+  - name: Open README 
+    command: gp open README.md      
+  - name: Install Steampipe with RSS Plugin
+    init: |
+      sudo /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/turbot/steampipe/main/install.sh)"
+      steampipe -v
+      steampipe query "select name from steampipe_registry_plugin;"
+      steampipe plugin install rss
+    command: |
+      steampipe service start --show-password 
+      
+ports:
+  # Apache SuperSet
+  - port: 8088
+ # Steampipe/ PostgreSQL
+  - port: 9193
