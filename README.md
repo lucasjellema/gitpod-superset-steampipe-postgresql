@@ -45,6 +45,16 @@ order by
 ![](images/query-feed-items.png)  
 Other properties available in the RSS_ITEM "view" include author_name and email, image_title and image_url, categories, description and content. Let's see if we can inspect these properties in Superset.
 
+### CSV Plugin
+
+The CSV plugin for Steampipe has also been installed. Additionally, the CSV plugin configuration (see `~/.steampipe/config`) has been defined to consider all CSV files in folder `/workspace/gitpod-superset-steampipe-postgresql/data` as sources for Steampipe tables. Steampipe therefore knows about a table called `trips` based on csv file `trips.csv`.
+
+You can query data from that table (and therefore that csv file) using:
+
+```
+steampipe query "select \"Trip ID\", \"Start date\", \"End date\", \"Destination\" from trips"
+```
+
 In order to look at data from Steampipe in Superset, we first need to add a database connection in Superset to Steampipe's PostgreSQL database.
 
 # Superset - and Connection to Steampipe
@@ -118,3 +128,75 @@ If we want to work with data from a different RSS feed, we only have to modify t
 
 
 
+# Load Data into PostgreSQL database
+
+install PSQL - client for PostgreSQL
+```
+sudo apt-get update
+sudo apt-get install postgresql-client -y
+```
+
+Connect through psql to the PostgreSQL database that Steampipe has started:
+
+```
+psql -h localhost -p 9193 -U steampipe -W -d steampipe
+```
+You are prompted for the password. You can learn about this password using `steampipe service status --show-password`
+
+Once connected to the database, query data from table trips (which is in fact csv file trips.csv)
+
+```
+select "Trip ID", "Start date", "End date", "Destination" from trips;
+```
+
+
+Let's create a real table with proper data types and constraints to hold the data from the CSV file:
+
+-- Create a new table to store the data
+CREATE TABLE trips_history (
+  trip_id INTEGER,
+  destination VARCHAR(255),
+  start_date DATE,
+  end_date DATE,
+  duration INTEGER,
+  traveler_name VARCHAR(255),
+  traveler_age INTEGER,
+  traveler_gender VARCHAR(10),
+  traveler_nationality VARCHAR(255),
+  accommodation_type VARCHAR(255),
+  accommodation_cost DECIMAL(10, 2),
+  transportation_type VARCHAR(255),
+  transportation_cost DECIMAL(10, 2)
+);
+
+-- Insert the data from the CSV file into the table
+WITH trips_with_date_converted
+ AS (
+  SELECT 
+    cast("Trip ID" as integer) as trip_id, 
+    "Destination" as destination, 
+    TO_DATE("Start date", 'MM/DD/YYYY') AS start_date, 
+    TO_DATE("End date", 'MM/DD/YYYY') AS end_date, 
+    cast("Duration (days)" as integer) as duration, 
+    "Traveler name" as traveler_name, 
+    cast("Traveler age" as integer) as traveler_age, 
+    "Traveler gender" as traveler_gender, 
+    "Traveler nationality" as traveler_nationality, 
+    "Accommodation type" as accommodation_type, 
+    cast("Accommodation cost" AS NUMERIC(10,2) ) as accommodation_cost, 
+    "Transportation type" as transportation_type, 
+    cast("Transportation cost"  AS NUMERIC(10,2)) as transportation_cost 
+  FROM trips
+)
+INSERT INTO trips_history (trip_id, destination, start_date, end_date, duration
+, traveler_name, traveler_age, traveler_gender, traveler_nationality
+, accommodation_type, accommodation_cost, transportation_type, transportation_cost) 
+SELECT trip_id, destination, start_date, end_date, duration
+, traveler_name, traveler_age, traveler_gender, traveler_nationality
+, accommodation_type, accommodation_cost, transportation_type, transportation_cost
+from trips_with_date_converted;
+
+
+
+
+```
