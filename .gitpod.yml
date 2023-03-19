@@ -8,14 +8,16 @@ tasks:
   - name: Open README 
     command: gp open README.md      
   - name: Install Steampipe with RSS Plugin
-    init: |
+    command: |
       sudo /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/turbot/steampipe/main/install.sh)"
       steampipe -v
       steampipe plugin install steampipe
       steampipe query "select name from steampipe_registry_plugin;"
       steampipe plugin install rss
-    command: |
+      steampipe plugin install csv
       steampipe service start --show-password 
+      cp /workspace/gitpod-superset-steampipe-postgresql/steampipe/csv.spc ~/.steampipe/config
+      steampipe query "select \"Trip ID\", \"Start date\", \"End date\", \"Destination\" from trips"
       
 ports:
   # Apache SuperSet
