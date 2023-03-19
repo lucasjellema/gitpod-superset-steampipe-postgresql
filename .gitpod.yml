@@ -22,5 +22,7 @@ tasks:
 ports:
   # Apache SuperSet
   - port: 8088
+    visibility: public
  # Steampipe/ PostgreSQL
   - port: 9193
+    visibility: public
