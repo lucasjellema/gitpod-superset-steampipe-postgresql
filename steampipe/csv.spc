@@ -24,7 +24,7 @@ connection "csv" {
   # character. Defaults to comma.
   # separator = ","
 
-    # If set, then lines beginning with the comment character without preceding
+  # If set, then lines beginning with the comment character without preceding
   # whitespace are ignored. Disabled by default.
   # comment = "#"
 
@@ -35,3 +35,4 @@ connection "csv" {
   #   - "off": Do not use the first row as the header. All column names will be generic.
   # Defaults to "auto".
   # header = "auto"
+}
