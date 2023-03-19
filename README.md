@@ -195,8 +195,8 @@ SELECT trip_id, destination, start_date, end_date, duration
 , traveler_name, traveler_age, traveler_gender, traveler_nationality
 , accommodation_type, accommodation_cost, transportation_type, transportation_cost
 from trips_with_date_converted;
-
-
-
-
 ```
+
+In Superset, create a a dataset for table `trips_history` in *public* schema in database *Steampipe*. 
+
+Then create for example chart Scatterplot, Calendar Heatmap.
