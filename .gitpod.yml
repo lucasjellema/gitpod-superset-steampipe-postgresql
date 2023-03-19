@@ -4,6 +4,7 @@ tasks:
       git clone https://github.com/apache/superset.git
       cd superset
       docker-compose -f docker-compose-non-dev.yml pull
+    command: |      
       docker-compose -f docker-compose-non-dev.yml up      
   - name: Open README 
     command: gp open README.md      
