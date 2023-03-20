@@ -151,7 +151,7 @@ select "Trip ID", "Start date", "End date", "Destination" from trips;
 
 
 Let's create a real table with proper data types and constraints to hold the data from the CSV file:
-
+```
 -- Create a new table to store the data
 CREATE TABLE trips_history (
   trip_id INTEGER,
@@ -168,8 +168,10 @@ CREATE TABLE trips_history (
   transportation_type VARCHAR(255),
   transportation_cost DECIMAL(10, 2)
 );
+```
 
 -- Insert the data from the CSV file into the table
+```
 WITH trips_with_date_converted
  AS (
   SELECT 
